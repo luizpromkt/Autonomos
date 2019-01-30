@@ -225,8 +225,13 @@ if (e>=4) {e=0;fcompletoe=1;}
  // Serial.print(valZ);
  // Serial.print(" ");
 
+  Serial.print(ch1);
+  Serial.print(" ");
+  Serial.println(ch2);
 
+if ( ch1 >= 1465 && ch1 <= 1485 && ch2 >= 1535 && ch2 <= 1555 )
 
+{
 //ACELEROMETRO/SERVOR
 // FALTA Checar qual é o ultimo estado lateral para saber como voltar sem invester o servo  
 if (valZ < 300) {
@@ -256,8 +261,10 @@ if (valZ < 300) {
               ch2 = map(valY, 260, 400, -50, 230);
               ch5 = ch1; 
         } 
-
   }
+
+} //Death Zone
+
 
 //SERVO SAIDA
  AILERON_D.write(ch1);   
