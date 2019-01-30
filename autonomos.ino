@@ -41,6 +41,7 @@ int filtroch2[20];
 int filtroch6[20];
 int fcompleto=0;
 int fcompletod=0;
+int fcompletoe=0;
 int somaX=0;
 int somaY=0;
 int somaZ=0;
@@ -52,7 +53,7 @@ int filtrof;
 long filtrop[20];
 long pressao;
 int serial; 
-
+int e;
 
 
 //ACELEROMETRO
@@ -94,9 +95,9 @@ pressaoAnterior-pressao;
   AILERON_D.attach(5);
   PROFUNDOR.attach(4);
   AILERON_E.attach(3);
- AILERON_D.write(90);   
- PROFUNDOR.write(90);   
- AILERON_E.write(90); 
+  AILERON_D.write(90);   
+  PROFUNDOR.write(90);   
+  AILERON_E.write(90); 
 
 
 
@@ -161,9 +162,6 @@ if (c>=5) {c=0;fcompleto=1;}
   filtroX[c]=valX;
   filtroY[c]=valY;
   filtroZ[c]=valZ;
-  filtroch1[c]=ch1;
-  filtroch2[c]=ch2;
-  filtroch6[c]=ch6;
    c++;
    
    if (fcompleto==1){
@@ -171,20 +169,14 @@ if (c>=5) {c=0;fcompleto=1;}
             somaX=somaX + filtroX[i];
             somaY=somaY + filtroY[i];
             somaZ=somaZ + filtroZ[i];
-            somach1=somach1 + filtroch1[i];
-            somach2=somach2 + filtroch2[i];
-        }
+            }
     somaX=somaX / 6;
     somaY=somaY / 6;
     somaZ=somaZ / 6;
-    somach1=somach1 / 6;
-    somach2=somach2 / 6 ;
 }
     valX=somaX; 
     valY=somaY; 
     valZ=somaZ;
-    ch1=somach1;
-    ch2=somach2;
 
 
 //FILTRO VARIOMETRO    
@@ -192,16 +184,35 @@ if (d>=19) {d=0;fcompletod=1;}
     filtrop[d]=pressao;
     d++;
    
-   if (fcompleto==1){
+   if (fcompletod==1){
         for (int i=0; i <= 19; i++){
             somap=somap + filtrop[i];
             }
         somap=somap / 20;
         }
-
     pressao=somap;
+    comparavario();
 
- comparavario();
+
+//FILTRO RECEPTOR    
+if (d>=3) {d=0;fcompletoe=1;}
+  filtroch1[e]=ch1;
+  filtroch2[e]=ch2;
+  filtroch6[e]=ch6;
+    e++;
+   
+   if (fcompletoe==1){
+        for (int i=0; i <= 3; i++){
+            somach1=somach1 + filtroch1[i];
+            somach2=somach2 + filtroch2[i];
+            }
+    somach1=somach1 / 4;
+    somach2=somach2 / 4;
+        }
+        
+    ch1=somach1;
+    ch2=somach2;
+    
 
  // Serial.print("X Aileron: ");
    AnguloX = map(valX, 260, 400, -90, 90);
