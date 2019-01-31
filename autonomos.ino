@@ -1,11 +1,12 @@
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
-// 1. CHECAR QUAL ULTIMO ESTADO LATERAL DO ACELEROMETRO PARA ESCOLHA A DIREÇÃO DO CERVO PARA CORRIGIR O CURSO.
-// 2. CRIAR AS 3 FUNÇÕES DE FLAPS E SE VIRAR COM OS CANAIS QUE O RÁDIO TEM.
-// 3. RESOLVER O PROBLEMA DOS SERVOS ZERADO (PROVAVELMENTE MECANICA) NA INICIALIZAÇÃO DO ARDUINO.
-// 4. HABILITAR FUNÇÃOI DE ALTITUDE MINIMA E MÁXIMA, COM ACIONAMENTO DE MOTOR
-// 5. CRIAR A FEATURE DE CURVA PARA O LADO QUE O AILERON SUBIR E UM AUMENTO RELEVANTE DE SUSTENTAÇÃO.
+// 1. RESOLVER O PROBLEMA DOS SERVOS ZERADO (PROVAVELMENTE MECANICA) NA INICIALIZAÇÃO DO ARDUINO.
+// 2. CHECAR QUAL ÚLTIMO ESTADO LATERAL DO ACELEROMETRO PARA ESCOLHA A DIREÇÃO DO CERVO PARA CORRIGIR O CURSO.
+// 3. CRIAR A FEATURE DE CURVA PARA O LADO QUE O AILERON SUBIR E UM AUMENTO RELEVANTE DE SUSTENTAÇÃO.
+// 4. FAZER TESTES DE STRESS COM MOTOR LIGADO E ESTIMATIVA DE CONSUMO DE BATERIA.
+// 5. CRIAR FUNÇÃO BUTERFLY PARA MELHOR EFICIENCIA DE VOO.
+// 6. HABILITAR FUNÇÃO DE ALTITUDE MINIMA E MÁXIMA, COM ACIONAMENTO DE MOTOR.
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
