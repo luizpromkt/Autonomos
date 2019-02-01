@@ -1,12 +1,11 @@
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
-// 1. RESOLVER O PROBLEMA DOS SERVOS ZERADO (PROVAVELMENTE MECANICA) NA INICIALIZAÇÃO DO ARDUINO.
-// 2. CHECAR QUAL ÚLTIMO ESTADO LATERAL DO ACELEROMETRO PARA ESCOLHA A DIREÇÃO DO CERVO PARA CORRIGIR O CURSO.
-// 3. CRIAR A FEATURE DE CURVA PARA O LADO QUE O AILERON SUBIR E UM AUMENTO RELEVANTE DE SUSTENTAÇÃO.
-// 4. FAZER TESTES DE STRESS COM MOTOR LIGADO E ESTIMATIVA DE CONSUMO DE BATERIA.
-// 5. CRIAR FUNÇÃO BUTERFLY PARA MELHOR EFICIENCIA DE VOO.
-// 6. HABILITAR FUNÇÃO DE ALTITUDE MINIMA E MÁXIMA, COM ACIONAMENTO DE MOTOR.
+// 1. CHECAR QUAL ÚLTIMO ESTADO LATERAL DO ACELEROMETRO PARA ESCOLHA A DIREÇÃO DO CERVO PARA CORRIGIR O CURSO.
+// 2. CRIAR A FEATURE DE CURVA PARA O LADO QUE O AILERON SUBIR E UM AUMENTO RELEVANTE DE SUSTENTAÇÃO.
+// 3. FAZER TESTES DE STRESS COM MOTOR LIGADO E ESTIMATIVA DE CONSUMO DE BATERIA.
+// 4. CRIAR FUNÇÃO BUTERFLY PARA MELHOR EFICIENCIA DE VOO.
+// 5. HABILITAR FUNÇÃO DE ALTITUDE MINIMA E MÁXIMA, COM ACIONAMENTO DE MOTOR.
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
@@ -22,8 +21,11 @@
 Servo AILERON_D;
 Servo PROFUNDOR;
 Servo AILERON_E;
+Servo MOTOR;
+
 int ch1; 
 int ch2;
+int ch3;
 int ch5;
 int ch6;
 
@@ -94,6 +96,7 @@ pressaoAnterior-pressao;
   AILERON_D.attach(5);
   PROFUNDOR.attach(4);
   AILERON_E.attach(3);
+  MOTOR.attach(2);
   AILERON_D.write(90);   
   PROFUNDOR.write(90);   
   AILERON_E.write(90); 
@@ -101,6 +104,7 @@ pressaoAnterior-pressao;
 
 
 //RECEPTOR
+  pinMode(10, INPUT); 
   pinMode(9, INPUT); 
   pinMode(8, INPUT);
   pinMode(7, INPUT);
@@ -115,6 +119,7 @@ void loop()
  //RECEPTOR
  ch1 = pulseIn(9, HIGH, 400000); // AILERON D 
  ch2 = pulseIn(8, HIGH, 400000); // PROFUNDOR
+ ch3 = pulseIn(10, HIGH, 400000); // PROFUNDOR
  ch6 = pulseIn(6, HIGH, 400000); // AILERON E
  ch5 = ch1;
  // Serial.print("Servo Aileron D "); 
@@ -269,7 +274,8 @@ if (valZ < 300) {
 //SERVO SAIDA
  AILERON_D.write(ch1);   
  PROFUNDOR.write(ch2);   
- AILERON_E.write(ch5);    
+ AILERON_E.write(ch5);
+ MOTOR.write(ch3);
  delay(15); 
 }
 
