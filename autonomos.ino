@@ -81,7 +81,7 @@ void setup()
 
 pressaoAnterior-pressao;
 
-  //VARIO
+  //VARIO DIY CRÉDITO
   Wire.begin();
   Serial.begin(9600);
   setupSensor();
@@ -117,7 +117,7 @@ void loop()
  //RECEPTOR
  ch1 = pulseIn(9, HIGH, 400000); // AILERON D 
  ch2 = pulseIn(8, HIGH, 400000); // PROFUNDOR
- ch3 = pulseIn(10, HIGH, 400000); // PROFUNDOR
+ ch3 = pulseIn(10, HIGH, 400000); // MOTOR
  ch6 = pulseIn(6, HIGH, 400000); // AILERON E
  ch5 = ch1;
  // Serial.print("Servo Aileron D "); 
@@ -139,7 +139,7 @@ void loop()
 
 
 
-//VARIO
+//VARIO DIY CRÉDITO
  pressure = getPressure();
  lowpassFast = lowpassFast + (pressure - lowpassFast) * 0.1;
  lowpassSlow = lowpassSlow + (pressure - lowpassSlow) * 0.05;
@@ -227,12 +227,11 @@ if (e>=2) {e=0;fcompletoe=1;}
  // Serial.print("  Z: ");
  // Serial.print(valZ);
  // Serial.print(" ");
+ // Serial.print(ch1);
+ // Serial.print(" ");
+ // Serial.println(ch2);
 
-//  Serial.print(ch1);
-//  Serial.print(" ");
-//  Serial.println(ch2);
-
-if ( ch1 >= 1450 && ch1 <= 1520 && ch2 >= 1500 && ch2 <= 1590 )
+if ( ch1 >= 1450 && ch1 <= 1520 && ch2 >= 1500 && ch2 <= 1590 ) //Death Zone
 
 {
 //ACELEROMETRO/SERVOR
@@ -288,8 +287,7 @@ else if(tombo==1)
  delay(15); 
 }
 
-
-//VARIO
+//VARIO DIY CRÉDITO
 long getPressure()
 {
   long D1, D2, dT, P;
@@ -304,7 +302,7 @@ long getPressure()
   SENS = ((unsigned long)calibrationData[1] << 15) + (((int64_t)calibrationData[3] * dT) >> 8);
   P = (((D1 * SENS) >> 21) - OFF) >> 15;
   // Serial.println(TEMP);
-  //  Serial.println(P);
+  // Serial.println(P);
   hpa=P; //100;
 
  
@@ -316,7 +314,7 @@ long getPressure()
  altimetro=altimetro * 30;
  // Serial.print("Pés");
  // Serial.print(altimetro);
- //altimetro=altimetro / 1000;
+ // altimetro=altimetro / 1000;
  altimetro=altimetro / 0.305;
  //Serial.print(altimetro);
  altimetro=altimetro / 100;
@@ -324,10 +322,7 @@ long getPressure()
  // Serial.println(hpa);  
   return P;
 }
-
-
-
-//VARIO
+//VARIO DIY CRÉDITO
 long getData(byte command, byte del)
 {
   long result = 0;
@@ -342,10 +337,7 @@ long getData(byte command, byte del)
   }
   return result;
 }
-
-
-
-//VARIO
+//VARIO DIY CRÉDITO
 void setupSensor()
 {
   twiSendCommand(0x77, 0x1e);
@@ -365,7 +357,7 @@ void setupSensor()
     Serial.println( calibrationData[i] ); 
   }
 }
-//VARIO
+//VARIO DIY CRÉDITO
 void twiSendCommand(byte address, byte command)
 {
   Wire.beginTransmission(address);
@@ -377,14 +369,6 @@ void twiSendCommand(byte address, byte command)
   }
 }
 
-/*
-//VARIO
-void ledOn()
-{digitalWrite(led,1);}
-//VARIO
-void ledOff()
-{digitalWrite(led,0);}
-*/
 
 void comparavario() {
 static unsigned long delayPisca;
