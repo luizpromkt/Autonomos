@@ -1,11 +1,8 @@
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
-// 1. CHECAR QUAL ÚLTIMO ESTADO LATERAL DO ACELEROMETRO PARA ESCOLHA A DIREÇÃO DO CERVO PARA CORRIGIR O CURSO.
-// 2. CRIAR A FEATURE DE CURVA PARA O LADO QUE O AILERON SUBIR E UM AUMENTO RELEVANTE DE SUSTENTAÇÃO.
-// 3. FAZER TESTES DE STRESS COM MOTOR LIGADO E ESTIMATIVA DE CONSUMO DE BATERIA.
-// 4. CRIAR FUNÇÃO BUTERFLY PARA MELHOR EFICIENCIA DE VOO.
-// 5. HABILITAR FUNÇÃO DE ALTITUDE MINIMA E MÁXIMA, COM ACIONAMENTO DE MOTOR.
+// 1. CRIAR A FEATURE DE CURVA PARA O LADO QUE O AILERON SUBIR E UM AUMENTO RELEVANTE DE SUSTENTAÇÃO.
+// 2. FAZER TESTES DE STRESS COM MOTOR LIGADO E ESTIMATIVA DE CONSUMO DE BATERIA.
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
@@ -28,6 +25,7 @@ int ch2;
 int ch3;
 int ch5;
 int ch6;
+int tombo;
 
 
 
@@ -162,21 +160,21 @@ void loop()
  
 
 //FILTRO ACELEROMETRO .
-if (c>=6) {c=0;fcompleto=1;}
+if (c>=9) {c=0;fcompleto=1;}
   filtroX[c]=valX;
   filtroY[c]=valY;
   filtroZ[c]=valZ;
    c++;
    
    if (fcompleto==1){
-        for (int i=0; i <= 6; i++){
+        for (int i=0; i <= 9; i++){
             somaX=somaX + filtroX[i];
             somaY=somaY + filtroY[i];
             somaZ=somaZ + filtroZ[i];
             }
-    somaX=somaX / 7;
-    somaY=somaY / 7;
-    somaZ=somaZ / 7;
+    somaX=somaX / 10;
+    somaY=somaY / 10;
+    somaZ=somaZ / 10;
 }
     valX=somaX; 
     valY=somaY; 
@@ -199,19 +197,19 @@ if (d>=19) {d=0;fcompletod=1;}
 
 
 //FILTRO RECEPTOR    
-if (e>=4) {e=0;fcompletoe=1;}
+if (e>=2) {e=0;fcompletoe=1;}
   filtroch1[e]=ch1;
   filtroch2[e]=ch2;
   filtroch6[e]=ch6;
     e++;
    
    if (fcompletoe==1){
-        for (int i=0; i <= 4; i++){
+        for (int i=0; i <= 2; i++){
             somach1=somach1 + filtroch1[i];
             somach2=somach2 + filtroch2[i];
             }
-    somach1=somach1 / 5;
-    somach2=somach2 / 5;
+    somach1=somach1 / 3;
+    somach2=somach2 / 3;
         }
         
     ch1=somach1;
@@ -230,20 +228,29 @@ if (e>=4) {e=0;fcompletoe=1;}
  // Serial.print(valZ);
  // Serial.print(" ");
 
-  Serial.print(ch1);
-  Serial.print(" ");
-  Serial.println(ch2);
+//  Serial.print(ch1);
+//  Serial.print(" ");
+//  Serial.println(ch2);
 
-if ( ch1 >= 1465 && ch1 <= 1485 && ch2 >= 1535 && ch2 <= 1555 )
+if ( ch1 >= 1450 && ch1 <= 1520 && ch2 >= 1500 && ch2 <= 1590 )
 
 {
 //ACELEROMETRO/SERVOR
-// FALTA Checar qual é o ultimo estado lateral para saber como voltar sem invester o servo  
+
 if (valZ < 300) {
-   //  Serial.print("Capotado");
+     Serial.print(tombo);
    if (ch6 <= 1200) {
+
+    if (tombo==2){
+    ch1=180;
+    ch5=180;
+      }
+else if(tombo==1)  
+    {
     ch1=0;
     ch5=0;
+   }
+      
         } 
   } else if ( (valZ < 360) && (valY < 270)) {
    //  Serial.print("Peso de cauda");
@@ -255,10 +262,12 @@ if (valZ < 300) {
    //  Serial.print("Tombado para Esquerda");
      ch1=0;
      ch5=0;
+     tombo=1;
   } else if ( (valZ < 360) && (valX > 380)) {
    //  Serial.print("Tombado para Direita");
      ch1=180;
      ch5=180;
+         tombo=2;
   } else {
          if (ch6 <= 1200) {
               //  Serial.print("Normal");
