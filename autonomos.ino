@@ -1,8 +1,12 @@
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
-// 1. CRIAR A FEATURE DE CURVA PARA O LADO QUE O AILERON SUBIR E UM AUMENTO RELEVANTE DE SUSTENTAÇÃO.
-// 2. FAZER TESTES DE STRESS COM MOTOR LIGADO E ESTIMATIVA DE CONSUMO DE BATERIA.
+// 1. REVER FILTRO DO VARIO E CONFERIR A CALIBRAGEM DO DETECTOR DE MASSA TERMAL, LIMITAR O GANHO DE TEMPO DA SUSTENTAÇÃO EM 7.5s
+// 2. CHAVE DE 3 POSIÇÕES PARA ESCOLHER SEM AUTOMAÇÃO / INFLUENCIA BAIXA DO ESTABILIZADOR / AUTOMAÇÃO COMPLETA COM CURVAS /
+// 3. CHAVE PARA ATIVAR OU DESATIVAR FLAPERONS
+// 4. CRIAR A FEATURE DE CURVA PARA O LADO QUE O AILERON SUBIR E UM AUMENTO RELEVANTE DE SUSTENTAÇÃO.
+// 5. ATIVAR FLAPERONS COM CHAVE E DESLIGAR AUTOMATICAMENTE QUANDO MOTOR ESTIVER DESLIGADO E QUANDO ESTIVER FAZENDO CURVAS.
+// 6. FAZER TESTES DE STRESS COM MOTOR LIGADO E ESTIMATIVA DE CONSUMO DE BATERIA.
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
@@ -14,27 +18,12 @@
 
 
 
-
-
-
-
-
-
-
-// constants won't change. Used here to set a pin number:
-const int ledPin =  LED_BUILTIN;// the number of the LED pin
-// Variables will change:
-int ledState = LOW;             // ledState used to set the LED
-// Generally, you should use "unsigned long" for variables that hold time
-// The value will quickly become too large for an int to store
-unsigned long previousMillis = 0;        // will store last time LED was updated
-// constants won't change:
-const long interval = 500;           // interval at which to blink (milliseconds)
+// Detector de Massa termal
+const int ledPin =  LED_BUILTIN;
+int ledState = LOW;             
+unsigned long previousMillis = 0;        
+const long interval = 500;          
 int valor=10;
-
-
-
-
 
 
 
@@ -107,19 +96,15 @@ void setup()
 {
 
 
+// Detector de Massa termal
+pinMode(ledPin, OUTPUT);
 
 
 
-
-
-  pinMode(ledPin, OUTPUT);
-
-
-
-
-  
+ 
 pressaoAnterior-pressao;
 
+  
   //VARIO DIY CRÉDITO
   Wire.begin();
   Serial.begin(9600);
@@ -153,7 +138,7 @@ pressaoAnterior-pressao;
 void loop()
 {
 
-
+// Detector de Massa termal
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     // save the last time you blinked the LED
@@ -165,7 +150,6 @@ void loop()
     } else {
       ledState = LOW;
     }
-
 
 if (valor > 0) {
 valor=valor-1;
@@ -213,7 +197,6 @@ valor=valor-1;
  toneFreqLowpass = toneFreqLowpass + (toneFreq - toneFreqLowpass) * 0.1;
  toneFreq = constrain(toneFreqLowpass, -500, 500);
  ddsAcc += toneFreq * 100 + 2000;
- 
  pressao=pressure;
 
 // Serial.println(pressao);
@@ -224,7 +207,6 @@ valor=valor-1;
 // if (toneFreq >=10) {ledOn();}
 // else {ledOff();}
  
-
 //FILTRO ACELEROMETRO .
 if (c>=9) {c=0;fcompleto=1;}
   filtroX[c]=valX;
@@ -296,8 +278,9 @@ if (e>=2) {e=0;fcompletoe=1;}
  // Serial.print(ch1);
  // Serial.print(" ");
  // Serial.println(ch2);
-
-if ( ch1 >= 1450 && ch1 <= 1520 && ch2 >= 1500 && ch2 <= 1590 ) //Death Zone
+  
+ //Death Zone
+if ( ch1 >= 1450 && ch1 <= 1520 && ch2 >= 1500 && ch2 <= 1590 )
 
 {
 //ACELEROMETRO/SERVOR
@@ -371,7 +354,6 @@ long getPressure()
   // Serial.println(P);
   hpa=P; //100;
 
- 
  // Serial.print("hpa");
  // Serial.print(hpa);
  altimetro=100900-hpa;// * 30; //0.305;
@@ -435,7 +417,7 @@ void twiSendCommand(byte address, byte command)
   }
 }
 
-
+//Detector de massa termal
 void comparavario() {
 static unsigned long delayPisca;
 long diferenca;
@@ -463,7 +445,6 @@ if ( (millis() - delayPisca) >= 1 ) {
           Serial.print(pressao);
           Serial.print(' ');
         
-        
 if (diferenca > 0) { valor=valor+diferenca+1; }
 if (diferenca < 0) { valor=valor-2; }
 if (valor < 0) { valor=0; }
@@ -471,6 +452,5 @@ if (valor < 0) { valor=0; }
 
 Serial.println(valor);
 
-  
   }
 }
