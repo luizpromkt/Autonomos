@@ -14,6 +14,33 @@
 
 
 
+
+
+
+
+
+
+
+// constants won't change. Used here to set a pin number:
+const int ledPin =  LED_BUILTIN;// the number of the LED pin
+// Variables will change:
+int ledState = LOW;             // ledState used to set the LED
+// Generally, you should use "unsigned long" for variables that hold time
+// The value will quickly become too large for an int to store
+unsigned long previousMillis = 0;        // will store last time LED was updated
+// constants won't change:
+const long interval = 500;           // interval at which to blink (milliseconds)
+int valor=10;
+
+
+
+
+
+
+
+
+
+
 //SERVO
 Servo AILERON_D;
 Servo PROFUNDOR;
@@ -79,6 +106,18 @@ long pressaoAnterior;
 void setup()
 {
 
+
+
+
+
+
+
+  pinMode(ledPin, OUTPUT);
+
+
+
+
+  
 pressaoAnterior-pressao;
 
   //VARIO DIY CRÉDITO
@@ -113,6 +152,33 @@ pressaoAnterior-pressao;
 //LOOP PRINCIPAL
 void loop()
 {
+
+
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    // save the last time you blinked the LED
+    previousMillis = currentMillis;
+
+    // if the LED is off turn it on and vice-versa:
+    if (valor >= 2) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    }
+
+
+if (valor > 0) {
+valor=valor-1;
+}
+    // set the LED with the ledState of the variable:
+    digitalWrite(ledPin, ledState);
+  }
+
+
+
+
+
+
 
  //RECEPTOR
  ch1 = pulseIn(9, HIGH, 400000); // AILERON D 
@@ -373,7 +439,7 @@ void twiSendCommand(byte address, byte command)
 void comparavario() {
 static unsigned long delayPisca;
 long diferenca;
-
+/*
 if ( (millis() - delayPisca) < 1 ) {
       digitalWrite(led,1);
   }
@@ -381,8 +447,8 @@ if ( (millis() - delayPisca) < 1 ) {
 else {
       digitalWrite(led,0);
     }
-
-if ( (millis() - delayPisca) >= 2 ) {
+*/
+if ( (millis() - delayPisca) >= 1 ) {
     delayPisca = millis(); 
     diferenca=pressaoAnterior-pressao;
         // Serial.print(diferenca);
@@ -390,12 +456,21 @@ if ( (millis() - delayPisca) >= 2 ) {
         // Serial.println(pressao);
         // Serial.println(' ');
         // Serial.println(hpa);
-        if(diferenca > 1 or diferenca < -1 ){
+        if(diferenca > 2 or diferenca < -2 ){
             pressaoAnterior=pressao;
-        //  Serial.print(diferenca);
-        //  Serial.print(' ');
-        //  Serial.println(pressao);
-        //  Serial.println(' ');
+          Serial.print(diferenca);
+          Serial.print(' ');
+          Serial.print(pressao);
+          Serial.print(' ');
+        
+        
+if (diferenca > 0) { valor=valor+diferenca+1; }
+if (diferenca < 0) { valor=valor-2; }
+if (valor < 0) { valor=0; }
         }
+
+Serial.println(valor);
+
+  
   }
 }
